@@ -1,0 +1,159 @@
+<html>
+    <head>
+        <!-- taken from https://facebook.github.io/react/docs/installation.html -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"></script>
+        <script src="https://unpkg.com/react@15/dist/react.js"></script>
+        <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+        <!-- Lodash -->
+        <script src="https://cdn.jsdelivr.net/lodash/4.17.3/lodash.js"></script>
+        <script type="text/babel">
+            var LeftNavigation = React.createClass({  
+                render() {
+                    return <div>
+                                <div className="leftnavi_heading">
+                                    <div className="box_title_heading">Departments/Units</div>
+                                </div>
+                                <br/> 
+                                <br/>
+                                <div className="leftnavi_itemcollection">
+                                    <div className="filtersearch" style={{marginTop: 10 + 'px'}}>
+                                        <div className="input-group">
+                                        <input className="form-control" type="text" placeholder="Search for Departments/Units"/>
+                                        <span className="input-group-btn"><button className="btn"> 
+                                                <i className="fa fa-search" aria-hidden="true"></i></button> </span> </div>
+                                    </div>
+                                    <div>OR</div>
+                                    <br/>
+                                    <ul className="MyFavAnchorTagGroup">
+                                        <li className="selected"> 
+                                        <a className="selected" href="#COLLAB_NUMBER">0 to 9</a>​<br/></li>
+                                        <li> 
+                                        <a href="#COLLAB_A_E">A to E</a></li>
+                                        <li> 
+                                        <a href="#COLLAB_F_J">F to J</a></li>
+                                        <li> 
+                                        <a href="#COLLAB_K_O">K to O</a></li>
+                                        <li> 
+                                        <a href="#COLLAB_P_T">P to T</a></li>
+                                        <li> 
+                                        <a href="#COLLAB_U_Z">U to Z</a></li>
+                                    </ul>
+                                </div>
+                        </div>;
+                }
+            });
+
+            var SiteItem = React.createClass({  
+                render() {
+                    return <div className="col-md-4 col-sm-6 col-xs-6">
+                            <div className="stdbox match-height" style={{height: 138}}>
+                              <div className="stdbar">&#160;</div>
+                              <div className="stdiconbox">
+                                 <div className="stdicon">SITE</div>
+                              </div>
+                              <h3 className="stdtitle">
+                                 <a href={this.props.siteitem.URL}>{this.props.siteitem.SiteName}</a>
+                                 <div className="createdby">created by {this.props.siteitem.CreatedBy}</div>
+                              </h3>
+                           </div>
+                        </div>;
+                }
+            });
+
+            var SiteListing = React.createClass({  
+                renderSites() {                    
+                    return this.props.sitedata.map((item) => (    
+                        <SiteItem siteitem={item} />
+                    ));                   
+                }, 
+                render() {
+                    return <div><div className="row section-title">
+                     <div className="col-md-12">
+                        <div className="col-md-12">
+                           <h4>{this.props.startnode} to {this.props.endnode}</h4>
+                        </div>
+                     </div>
+                  </div>
+                  <div className="mycollaborationsbox">
+                     <div className="row">
+                         {this.renderSites()}                         
+                         </div>
+                    </div>
+                </div>;
+                }
+            });
+
+            var TheRoot = React.createClass({
+                getInitialState() {
+                    // returning sample data before the actual is retrieved via fetch
+                    return {
+                        sitesdata: [{"SiteName":"1 Team Site 1","CreatedBy":"1 Team Site 1","URL":"http://www.google.com"},
+{"SiteName":"1 Army Maintenance Base (AMB)","CreatedBy":"1 Army Maintenance Base (AMB)","URL":"http://www.google.com"}]
+                    }
+                },        
+                componentDidMount() {
+                    var that = this;
+                    var url = 'samplesitesdata.json';
+                    fetch(url)
+                    .then(function(response) {
+                        if (response.status >= 400) {
+                            throw new Error("Bad response from server");
+                        }              
+                        return response.json();
+                    })
+                    .then(function(data) {                        
+                        that.setState({ sitesdata: data});                        
+                    });
+                },       
+                filterdata(filterarray) {                    
+                    var test = _.filter(this.state.sitesdata, function (item) {                                                    
+                            var startChar = item.SiteName.substring(0,1).toLowerCase();
+                            var output = _.includes(filterarray, startChar);                            
+                            return output;
+                    });                    
+                    return test;
+                },
+                render() {
+                    return <div className="row">
+                        <div className="col-md-3 fluid_leftpanel">
+                            <div style={{marginBottom: 20}}>
+                                <br />&#160;</div>    
+                                <LeftNavigation />
+                        </div>
+                        <div className="col-md-9 maincontent_box fluid_content">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <h1 className="maincontent_heading">
+                                    <div className="box_title_heading">Departments/Units Listing</div>
+                                    <div className="box_allview_wrapper">&#160;</div>
+                                    </h1>
+                                    <div className="main_content">
+                                        <SiteListing startnode='0' endnode='9' sitedata={this.filterdata(['0','1','2','3','4','5','6','7','8','9'])} />
+                                        <SiteListing startnode='A' endnode='E' sitedata={this.filterdata(['a','b','c','d','e'])} />
+                                        <SiteListing startnode='F' endnode='J' sitedata={this.filterdata(['f','g','h','i','j'])} />
+                                        <SiteListing startnode='K' endnode='O' sitedata={this.filterdata(['k','l','m','n','o'])} />
+                                        <SiteListing startnode='P' endnode='T' sitedata={this.filterdata(['p','q','r','s','t'])} />
+                                        <SiteListing startnode='U' endnode='Z' sitedata={this.filterdata(['u','v','w','x','y','z'])} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>;
+                }
+            })
+
+            ReactDOM.render(
+                <div>
+                    <TheRoot />
+                </div>, 
+                document.getElementById('root')
+            );
+        </script>
+    </head>
+    <body>
+        <div id="root">
+            <!-- this portion is managed by react -->
+        </div>
+    </body>
+</html>
