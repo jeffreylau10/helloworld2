@@ -1,0 +1,121 @@
+<html>
+    <head>
+        <!-- taken from https://facebook.github.io/react/docs/installation.html -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"></script>
+        <script src="https://unpkg.com/react@15/dist/react.js"></script>
+        <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+        <!-- Visibility mixin https://github.com/Pomax/react-component-visibility -->
+        <script src="./node_modules/react-component-visibility/index.js"></script>        
+        <!-- PnP JS -->
+        <script src="./js/pnp.js"></script>
+
+        <script type="text/babel">
+            var AppItem = React.createClass({                
+                render() {
+                    return <div class="appsitem">
+              <div className="appslogo">
+                <a><img src="{this.props.appitem.IconURL}" /></a>
+              </div>
+              <div className="appsdesc">
+                <h4><a>{this.props.appitem.Title}</a></h4>
+                <p>{/*this.props.appitem.Description*/}</p>
+              </div>
+              <div className="appschecked">
+                Added to My App
+              </div>
+              <div className="appsdownload">
+                <a>Instructional Manual&nbsp;<i class="glyphicon glyphicon-download-alt"></i></a><br/>
+                <a>eLearning Guide&nbsp;<i class="glyphicon glyphicon-download-alt"></i></a><br />               
+              </div>
+            </div>;
+                }
+            });
+
+            var AppsListing = React.createClass({  
+                getInitialState() {
+                    // returning sample data before the actual is retrieved via fetch
+                    return {
+                        appsdata: [
+                                    {
+                                    "odata.type": "SP.Data.EAppsListItem",
+                                    "odata.id": "150b64f7-ca79-44fc-8189-3bcceb3676a9",
+                                    "odata.etag": "\"5\"",
+                                    "odata.editLink": "Web/Lists(guid'07515136-4d58-4e3a-8df5-6307e1b1a7da')/Items(1)",
+                                    "FileSystemObjectType": 0,
+                                    "Id": 1,
+                                    "ContentTypeId": "0x01005B90068C481B4649BF5E6E51826D3491",
+                                    "Title": "GOMs, Directives & Circulars",
+                                    "Description": "<div class=\"ExternalClassDEDC81EC2B0C484AA8FD411F84259F7D\"><p>​<span>Pellentesque egestas tellus eu est tempus, laoreet finibus quam placerat. Ut vitae dolor eni​m. Etiam velit dui, condimentum in euismod imperdiet.</span>​<br></p></div>​<br>",
+                                    "Category": "My Apps",
+                                    "URL": null,
+                                    "IconURL": "/SiteAssets/eApps/apps-myapps-1%5B1%5D.jpg",
+                                    "ID": 1,
+                                    "Modified": "2016-12-15T12:29:59Z",
+                                    "Created": "2016-11-23T11:27:07Z",
+                                    "AuthorId": 1073741823,
+                                    "EditorId": 1073741823,
+                                    "OData__UIVersionString": "1.0",
+                                    "Attachments": true,
+                                    "GUID": "52e32f33-c2b6-4acf-9665-d1c2a4257c43"
+                                    },
+                                    {
+                                    "odata.type": "SP.Data.EAppsListItem",
+                                    "odata.id": "79d7b91f-075f-4978-a9ac-4e478e5d00aa",
+                                    "odata.etag": "\"6\"",
+                                    "odata.editLink": "Web/Lists(guid'07515136-4d58-4e3a-8df5-6307e1b1a7da')/Items(2)",
+                                    "FileSystemObjectType": 0,
+                                    "Id": 2,
+                                    "ContentTypeId": "0x01005B90068C481B4649BF5E6E51826D3491",
+                                    "Title": "Athena",
+                                    "Description": "<div class=\"ExternalClassD0D881836B9A4C708BDD175DBB73E6A9\"><p>​<span>Pellentesque egestas tellus eu est tempus, laoreet finibus quam placerat. Ut vitae dolor enim. Etiam velit dui, condimentum in euismo​d imperdiet.</span></p>​\n</div>",
+                                    "Category": "My Apps",
+                                    "URL": null,
+                                    "IconURL": "/SiteAssets/eApps/apps-myapps-2%5B1%5D.jpg",
+                                    "ID": 2,
+                                    "Modified": "2016-12-15T12:30:10Z",
+                                    "Created": "2016-11-23T11:29:46Z",
+                                    "AuthorId": 1073741823,
+                                    "EditorId": 1073741823,
+                                    "OData__UIVersionString": "1.0",
+                                    "Attachments": true,
+                                    "GUID": "754b4882-cf8a-4e65-bc1f-b1b804349267"
+                                    }]
+                    }
+                },      
+                componentDidMount() {
+                    /*var that = this;
+                    $pnp.sp.web.lists.getByTitle('eApps').items.get().then(function(data){                        
+                        that.setState({ appsdata: data});            
+                    });*/
+                },          
+                renderApps() {                                        
+                    return this.state.appsdata.map((appitem) => (    
+                        <AppItem appitem={appitem} />
+                    ));                   
+                },    
+                render() {
+                    return <div><h1 className="maincontent_heading" id="MYAPPS_EmployeeServices">
+                            <div className="box_title_heading">Employee Services</div>
+                            <div className="box_allview_wrapper">&nbsp;</div>
+                        </h1>
+                        <div className="appsgroup">
+                            {this.renderApps()}
+                        </div></div>;
+                }
+            });
+            
+            ReactDOM.render(
+                <AppsListing />, 
+                document.getElementById('root')
+            );
+        </script>
+
+    </head>
+    <body>
+        Test HTML
+        <div id="root">
+            <!-- this portion is managed by react -->
+        </div>
+    </body>
+
+</html>

@@ -24,7 +24,7 @@
             var GoodDeals = React.createClass({  
                 mixins : [
                     //required
-                    ComponentVisibilityMixin
+                    //ComponentVisibilityMixin
                 ],
                 getInitialState() {
                     // returning sample data before the actual is retrieved via fetch
@@ -34,7 +34,11 @@
 {"Title":"Lorem Ipsum 3","PromoPeriod":"28 Oct 2016 to 31 Mar 2017","PostedBy":"MSS-PSC","PostedDate":"29-12-2016 5:08pm"}]
                     }
                 },                            
-                retrieveFromWebService() {                    
+                retrieveFromWebService() {     
+                    $pnp.sp.web.lists.getByTitle('eApps').items.get().then(function(data){
+                        //that.setState.appsdata = data;
+                        console.log(data);
+                    });                                   
                     var that = this;
                     var url = 'sampledata.json';
                     fetch(url)
